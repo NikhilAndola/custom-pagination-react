@@ -66,19 +66,58 @@ export default function App() {
     }
   };
 
+  const handlePrevButton = (e) => {
+    setCurrentPage(currentPage - 1);
+
+    if ((currentPage - 1) % pageNumberLimit === 0) {
+      setMaxPageNumberLimit(maxPageNumberLimit - pageNumberLimit);
+      setMinPageNumberLimit(minPageNumberLimit - pageNumberLimit);
+    }
+  };
+
+  let pageIncrementBtn = null;
+  if (pages.length > maxPageNumberLimit) {
+    pageIncrementBtn = <li onClick={handleNextButton}> &hellip;</li>;
+  }
+
+  let pageDecrementBtn = null;
+  if (minPageNumberLimit >= 1) {
+    pageDecrementBtn = <li onClick={handlePrevButton}> &hellip;</li>;
+  }
+
+  const handleLoadmore = () => {
+    setItemsPerPage(itemsPerPage + 5);
+  };
+
   return (
     <div>
       <h2>Custom Pagination using ReactJs</h2>
       <RenderData data={currentItems} />
       <ul className="pageNumbers">
         <li>
-          <button onClick={}>Prev</button>
+          <button
+            onClick={handlePrevButton}
+            disabled={currentPage === pages[0] ? true : false}
+          >
+            Prev
+          </button>
         </li>
+        {pageDecrementBtn}
         {RenderPageNumbers}
+        {pageIncrementBtn}
         <li>
-          <button onClick={handleNextButton}>Next</button>
+          <button
+            onClick={handleNextButton}
+            disabled={currentPage === pages[pages.length - 1] ? true : false}
+          >
+            Next
+          </button>
         </li>
       </ul>
+
+      <button onClick={handleLoadmore} className="loadmore">
+        Load More
+      </button>
     </div>
   );
 }
